@@ -47,6 +47,7 @@ RUN dpkg --add-architecture i386 && \
 	libtool \
 	locales \
 	make \
+	menu \
 	mono-complete \
 	net-tools \
 	ninja-build \
@@ -62,6 +63,7 @@ RUN dpkg --add-architecture i386 && \
 	sudo \
 	texinfo \
 	valgrind \
+	vim \
 	wget \
 	x11vnc \
 	xvfb \
@@ -90,6 +92,16 @@ RUN wget -q https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/master/s
 	pip3 install west &&\
 	pip3 install sh
 
+RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh && \
+	chmod +x cmake-${CMAKE_VERSION}-Linux-x86_64.sh && \
+	./cmake-${CMAKE_VERSION}-Linux-x86_64.sh --skip-license --prefix=/usr/local && \
+	rm -f ./cmake-${CMAKE_VERSION}-Linux-x86_64.sh
+
+RUN west init /zephyrproject && \
+        cd /zephyrproject && \
+        west update && \
+        west zephyr-export && \
+        pip3 install -r /zephyrproject/zephyr/scripts/requirements.txt
 
 RUN wget -q "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${ZSDK_VERSION}/zephyr-sdk-${ZSDK_VERSION}-setup.run" && \
 	sh "zephyr-sdk-${ZSDK_VERSION}-setup.run" --quiet -- -d /opt/toolchains/zephyr-sdk-${ZSDK_VERSION} && \
@@ -100,11 +112,6 @@ RUN wget -q https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/RC
 	rm -f ${GCC_ARM_NAME}-x86_64-linux.tar.bz2 && \
 	mv ${GCC_ARM_NAME} /opt/toolchains/${GCC_ARM_NAME}
 
-RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.sh && \
-	chmod +x cmake-${CMAKE_VERSION}-Linux-x86_64.sh && \
-	./cmake-${CMAKE_VERSION}-Linux-x86_64.sh --skip-license --prefix=/usr/local && \
-	rm -f ./cmake-${CMAKE_VERSION}-Linux-x86_64.sh
-
 RUN groupadd -g $GID -o user
 
 RUN useradd -u $UID -m -g user -G plugdev user \
@@ -114,7 +121,7 @@ RUN useradd -u $UID -m -g user -G plugdev user \
 # Set the locale
 ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 ENV ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-${ZSDK_VERSION}
-ENV ZEPHYR_BASE=/workdir
+ENV ZEPHYR_BASE=/zephyrproject
 ENV GNUARMEMB_TOOLCHAIN_PATH=/opt/toolchains/${GCC_ARM_NAME}
 ENV PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 ENV DISPLAY=:0

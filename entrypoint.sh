@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /zephyrproject/zephyr/zephyr-env.sh
+
 SNUM=$(echo $DISPLAY | sed 's/:\([0-9][0-9]*\)/\1/')
 xvfb-run -n $SNUM -s "-screen 0 1024x768x24" -f ~/.Xauthority openbox-session &
 sleep 1
