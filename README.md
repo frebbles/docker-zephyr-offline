@@ -1,7 +1,26 @@
-# Docker image suitable for stand-alone development, based on zephyr's own docker-image
+# Docker image suitable for stand-alone/offline development, based on zephyr's own docker-image
+
+Much of the zephyr installation and updates system incorporates a lot of pulling information 
+from various repositories from the internet in order to complete a full build setup. 
+On systems where hardware is being developed with security in mind, air gaps, or limited 
+internet access hand severely hinder being able to setup a proper build environment without 
+having all repositories available.
+
+Instead of having to transfer a full Virtual Machine and configure each time, this zephyr docker 
+image intends to have the ability to upgrade and transfer various zephyr versions and compile
+against your zephyr application whilst maintaining security.
+
+Also, this concept can be used to incorporate into a CI system. Or used as a basis for other
+complex build environments!.
+
+Based off the [Zephyr Docker image on the Zephyr-rtos github repository](https://github.com/zephyrproject-rtos/docker-image)
 
 ## Building
-This docker image can be built with
+Before building, ensure that the entrypoint.sh has execute persmissions!
+
+```chmod ug+x entrypoint.sh```
+
+This docker image can be built with the following
 
 ```
 docker build -t zephyr_doc:v_xxx .
