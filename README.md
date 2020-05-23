@@ -27,8 +27,12 @@ docker build -t zephyr_doc:v_xxx .
 ```
 
 ## Running zephyr builds
+The intended operation is that on your local machine you would have a Zephyr application or working directory,
+this would be the <local path to zephyr working dir> and would be mapped using the command below 
+to /workdir in the docker container. All compiles/builds would then be kept persistent in your local
+machine environment and the build environment would remain unchanged.
 
-This image can be used for development and building zephyr samples and tests,
+This image can be used for development and building zephyr applications, samples and tests,
 for example:
 
 ```
