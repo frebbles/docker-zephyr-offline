@@ -6,9 +6,10 @@ On systems where hardware is being developed with security in mind, air gaps, or
 internet access hand severely hinder being able to setup a proper build environment without 
 having all repositories available.
 
-Instead of having to transfer a full Virtual Machine and configure each time, this zephyr docker 
-image intends to have the ability to upgrade and transfer various zephyr versions and compile
-against your zephyr application whilst maintaining security.
+Instead of having to transfer a full Virtual Machine, or attempt a full installation on a 
+non internet connected system (welcome to dependency hell), this zephyr docker image 
+intends to enable building and debugging a zephyr application without requiring an internet 
+connection.
 
 Also, this concept can be used to incorporate into a CI system. Or used as a basis for other
 complex build environments!.
