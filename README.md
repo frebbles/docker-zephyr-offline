@@ -34,10 +34,10 @@ to /workdir in the docker container. All compiles/builds would then be kept pers
 machine environment and the build environment would remain unchanged.
 
 This image can be used for development and building zephyr applications, samples and tests,
-for example:
+for example (--privileged required for USB port access/flashing):
 
 ```
-docker run -ti -v <local path to zephyr working dir>:/workdir zephyr_doc:v_xxx
+docker run -ti --privileged -v <local path to zephyr working dir>:/workdir zephyr_doc:v_xxx
 ```
 
 Then, follow the steps below to build a sample application:
@@ -98,7 +98,16 @@ vncviewer localhost:5900
 
 ## Programming/Debugging/Flashing
 
-TODO
+Programming with 
+
+```west flash```
+
+is working, but you will likely require adding an appropriate udev rules file that will give
+docker permissions to access the device, also requiring the --privileged docker run option.
+
+An example for an ST-Link V2 exists as 66-stlink-rule.rules and can be installed/added by:
+
+```sudo cp 66-stlink-rule.rules /etc/udev/rules.d/```
 
 ## Moving the Docker image
 
